@@ -1,0 +1,109 @@
+FUNCTION_BLOCK climate
+
+VAR_INPUT
+   time : REAL;
+   season : REAL;
+END_VAR
+
+VAR_OUTPUT
+   temperature : REAL;
+END_VAR
+
+FUZZIFY time
+   TERM day := sigm -1.5 6;
+   TERM night := sigm 1.5 6;
+END_FUZZIFY
+
+FUZZIFY month
+   TERM rec0 := gbell 2 4 0;
+   TERM rec1 := gbell 2 4 1;
+   TERM rec2 := gbell 2 4 2;
+   TERM rec3 := gbell 2 4 3;
+   TERM rec4 := gbell 2 4 4;
+   TERM rec5 := gbell 2 4 5;
+   TERM rec6 := gbell 2 4 6;
+   TERM rec7 := gbell 2 4 7;
+   TERM rec8 := gbell 2 4 8;
+   TERM rec9 := gbell 2 4 9;
+   TERM rec10 := gbell 2 4 10;
+   TERM rec11 := gbell 2 4 11;
+END_FUZZIFY
+
+DEFUZZIFY temperature
+   TERM rec0_day := gbell 2 4 13.500000;
+   TERM rec0_night := gbell 2 4 5.000000;
+   TERM rec1_day := gbell 2 4 14.500000;
+   TERM rec1_night := gbell 2 4 5.500000;
+   TERM rec2_day := gbell 2 4 17.000000;
+   TERM rec2_night := gbell 2 4 7.000000;
+   TERM rec3_day := gbell 2 4 19.000000;
+   TERM rec3_night := gbell 2 4 9.000000;
+   TERM rec4_day := gbell 2 4 22.500000;
+   TERM rec4_night := gbell 2 4 12.000000;
+   TERM rec5_day := gbell 2 4 27.000000;
+   TERM rec5_night := gbell 2 4 16.000000;
+   TERM rec6_day := gbell 2 4 29.500000;
+   TERM rec6_night := gbell 2 4 18.000000;
+   TERM rec7_day := gbell 2 4 29.500000;
+   TERM rec7_night := gbell 2 4 18.000000;
+   TERM rec8_day := gbell 2 4 27.000000;
+   TERM rec8_night := gbell 2 4 16.000000;
+   TERM rec9_day := gbell 2 4 22.000000;
+   TERM rec9_night := gbell 2 4 12.500000;
+   TERM rec10_day := gbell 2 4 17.000000;
+   TERM rec10_night := gbell 2 4 8.500000;
+   TERM rec11_day := gbell 2 4 11.000000;
+   TERM rec11_night := gbell 2 4 6.000000;
+   METHOD : COG;
+   DEFAULT := 0;
+END_DEFUZZIFY
+
+DEFUZZIFY humidity
+   TERM rec0_humidity := gauss 0.760000 0.1;
+   TERM rec1_humidity := gauss 0.760000 0.1;
+   TERM rec2_humidity := gauss 0.760000 0.1;
+   TERM rec3_humidity := gauss 0.760000 0.1;
+   TERM rec4_humidity := gauss 0.760000 0.1;
+   TERM rec5_humidity := gauss 0.760000 0.1;
+   TERM rec6_humidity := gauss 0.600000 0.1;
+   TERM rec7_humidity := gauss 0.610000 0.1;
+   TERM rec8_humidity := gauss 0.660000 0.1;
+   TERM rec9_humidity := gauss 0.760000 0.1;
+   TERM rec10_humidity := gauss 0.760000 0.1;
+   TERM rec11_humidity := gauss 0.760000 0.1;
+   METHOD : COG;
+   DEFAULT := 0;
+END_DEFUZZIFY
+
+RULEBLOCK No1
+   ACCU : MAX;
+   AND : MIN;
+   ACT : MIN;
+
+   RULE 1 : IF time IS day AND month is rec0 THEN temperature IS rec0_day, humidity IS rec0_humidity;
+   RULE 2 : IF time IS night AND month is rec0 THEN temperature IS rec0_night, humidity IS rec0_humidity;
+   RULE 3 : IF time IS day AND month is rec1 THEN temperature IS rec1_day, humidity IS rec1_humidity;
+   RULE 4 : IF time IS night AND month is rec1 THEN temperature IS rec1_night, humidity IS rec1_humidity;
+   RULE 5 : IF time IS day AND month is rec2 THEN temperature IS rec2_day, humidity IS rec2_humidity;
+   RULE 6 : IF time IS night AND month is rec2 THEN temperature IS rec2_night, humidity IS rec2_humidity;
+   RULE 7 : IF time IS day AND month is rec3 THEN temperature IS rec3_day, humidity IS rec3_humidity;
+   RULE 8 : IF time IS night AND month is rec3 THEN temperature IS rec3_night, humidity IS rec3_humidity;
+   RULE 9 : IF time IS day AND month is rec4 THEN temperature IS rec4_day, humidity IS rec4_humidity;
+   RULE 10 : IF time IS night AND month is rec4 THEN temperature IS rec4_night, humidity IS rec4_humidity;
+   RULE 11 : IF time IS day AND month is rec5 THEN temperature IS rec5_day, humidity IS rec5_humidity;
+   RULE 12 : IF time IS night AND month is rec5 THEN temperature IS rec5_night, humidity IS rec5_humidity;
+   RULE 13 : IF time IS day AND month is rec6 THEN temperature IS rec6_day, humidity IS rec6_humidity;
+   RULE 14 : IF time IS night AND month is rec6 THEN temperature IS rec6_night, humidity IS rec6_humidity;
+   RULE 15 : IF time IS day AND month is rec7 THEN temperature IS rec7_day, humidity IS rec7_humidity;
+   RULE 16 : IF time IS night AND month is rec7 THEN temperature IS rec7_night, humidity IS rec7_humidity;
+   RULE 17 : IF time IS day AND month is rec8 THEN temperature IS rec8_day, humidity IS rec8_humidity;
+   RULE 18 : IF time IS night AND month is rec8 THEN temperature IS rec8_night, humidity IS rec8_humidity;
+   RULE 19 : IF time IS day AND month is rec9 THEN temperature IS rec9_day, humidity IS rec9_humidity;
+   RULE 20 : IF time IS night AND month is rec9 THEN temperature IS rec9_night, humidity IS rec9_humidity;
+   RULE 21 : IF time IS day AND month is rec10 THEN temperature IS rec10_day, humidity IS rec10_humidity;
+   RULE 22 : IF time IS night AND month is rec10 THEN temperature IS rec10_night, humidity IS rec10_humidity;
+   RULE 23 : IF time IS day AND month is rec11 THEN temperature IS rec11_day, humidity IS rec11_humidity;
+   RULE 24 : IF time IS night AND month is rec11 THEN temperature IS rec11_night, humidity IS rec11_humidity;
+END_RULEBLOCK
+
+END_FUNCTION_BLOCK
