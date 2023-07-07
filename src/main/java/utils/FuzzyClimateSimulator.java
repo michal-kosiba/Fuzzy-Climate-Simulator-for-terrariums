@@ -23,7 +23,7 @@ public class FuzzyClimateSimulator {
                 "\n" + //
                 "VAR_INPUT\n" + //
                 "   time : REAL;\n" + //
-                "   season : REAL;\n" + //
+                "   month : REAL;\n" + //
                 "END_VAR\n" + //
                 "\n" + //
                 "VAR_OUTPUT\n" + //
@@ -39,7 +39,7 @@ public class FuzzyClimateSimulator {
                 "FUZZIFY month\n";
 
         for (int i = 0; i < cd.size(); i++) {
-            fcl += String.format("   TERM rec%d := gbell 2 4 %d;\n", i, cd.getRecord(i).month);
+            fcl += String.format("   TERM rec%d := gauss %d %f ;\n", i, cd.getRecord(i).month, 12.0/cd.size() * 0.4);
         }
 
                 fcl += "END_FUZZIFY\n" + //
@@ -47,8 +47,8 @@ public class FuzzyClimateSimulator {
                 "DEFUZZIFY temperature\n";
 
         for (int i = 0; i < cd.size(); i++) {
-            fcl += String.format("   TERM rec%d_day := gbell 2 4 %f;\n", i, cd.getRecord(i).dayTemperature);
-            fcl += String.format("   TERM rec%d_night := gbell 2 4 %f;\n", i, cd.getRecord(i).nightTemperature);
+            fcl += String.format("   TERM rec%d_day := gauss %f %f;\n", i, cd.getRecord(i).dayTemperature, 12.0/cd.size() * 4);
+            fcl += String.format("   TERM rec%d_night := gauss %f %f;\n", i, cd.getRecord(i).nightTemperature, 12.0/cd.size() * 4);
         }
                 fcl += "   METHOD : COG;\n" + //
                 "   DEFAULT := 0;\n" + //
@@ -57,7 +57,7 @@ public class FuzzyClimateSimulator {
                 "DEFUZZIFY humidity\n";
 
         for (int i = 0; i < cd.size(); i++) {
-            fcl += String.format("   TERM rec%d_humidity := gauss %f 0.1;\n", i, cd.getRecord(i).humidity);
+            fcl += String.format("   TERM rec%d_humidity := gauss %f %f;\n", i, cd.getRecord(i).humidity, 12.0/ cd.size() * 0.03);
         }
 
                 fcl += "   METHOD : COG;\n" + //
@@ -99,24 +99,26 @@ public class FuzzyClimateSimulator {
         fis.setVariable("month", 6);
         fis.evaluate();
 
-        // Create a plot
         JDialogFis jdf = null;
         if (!JFuzzyChart.UseMockClass) jdf = new JDialogFis(fis, 800, 600);
 
-        // Show output variable
         System.out.println("Output value:" + fis.getVariable("temperature").getValue());
         System.out.println("Output value:" + fis.getVariable("humidity").getValue());
 
-        UtilityWriter uwu = new UtilityWriter("test", new DecimalFormat("0.00"));
-        uwu.initialize("Month", "Day", "Night", "Humidity");
+        UtilityWriter uwu = new UtilityWriter("test", new DecimalFormat("0.00000"));
+        uwu.initialize("Month", "Day", "Dawn", "Night", "Humidity");
 
-        // Set different values for 'food' and 'service'. Evaluate the system and show variables
-        for (double season = 0.0, time = 0.0; season < 12; season += 1) {
-            // Evaluate system using these parameters
-            fis.getVariable("month").setValue(Math.abs(season));
+        for (double days = 0.0, time = 0.0; days < 365; days += 1) {
+
+            fis.getVariable("month").setValue(days/365 * 11);
+
             fis.getVariable("time").setValue(0);
             fis.evaluate();
-            uwu.append(season).append(fis.getVariable("temperature").getValue());
+            uwu.append(Math.floor(days/365 * 12)).append(fis.getVariable("temperature").getValue());
+
+            fis.getVariable("time").setValue(6);
+            fis.evaluate();
+            uwu.append(fis.getVariable("temperature").getValue());
 
             fis.getVariable("time").setValue(12);
             fis.evaluate();
@@ -125,11 +127,9 @@ public class FuzzyClimateSimulator {
 
             uwu.push();
 
-            // Print result & update plot
-            System.out.println(String.format("Season: %2.2f\tTime:%2.2f\t=> Temperature: %2.2f ", season, time, fis.getVariable("temperature").getValue()));
+            System.out.println(String.format("Season: %2.2f\tTime:%2.2f\t=> Temperature: %2.2f ", days, time, fis.getVariable("temperature").getValue()));
             if (jdf != null) jdf.repaint();
 
-            // Small delay
             Thread.sleep(100);
         }
         uwu.save();

@@ -2,11 +2,12 @@ FUNCTION_BLOCK climate
 
 VAR_INPUT
    time : REAL;
-   season : REAL;
+   month : REAL;
 END_VAR
 
 VAR_OUTPUT
    temperature : REAL;
+   humidity : REAL;
 END_VAR
 
 FUZZIFY time
@@ -15,62 +16,62 @@ FUZZIFY time
 END_FUZZIFY
 
 FUZZIFY month
-   TERM rec0 := gbell 2 4 0;
-   TERM rec1 := gbell 2 4 1;
-   TERM rec2 := gbell 2 4 2;
-   TERM rec3 := gbell 2 4 3;
-   TERM rec4 := gbell 2 4 4;
-   TERM rec5 := gbell 2 4 5;
-   TERM rec6 := gbell 2 4 6;
-   TERM rec7 := gbell 2 4 7;
-   TERM rec8 := gbell 2 4 8;
-   TERM rec9 := gbell 2 4 9;
-   TERM rec10 := gbell 2 4 10;
-   TERM rec11 := gbell 2 4 11;
+   TERM rec0 := gauss 0 0.400000 ;
+   TERM rec1 := gauss 1 0.400000 ;
+   TERM rec2 := gauss 2 0.400000 ;
+   TERM rec3 := gauss 3 0.400000 ;
+   TERM rec4 := gauss 4 0.400000 ;
+   TERM rec5 := gauss 5 0.400000 ;
+   TERM rec6 := gauss 6 0.400000 ;
+   TERM rec7 := gauss 7 0.400000 ;
+   TERM rec8 := gauss 8 0.400000 ;
+   TERM rec9 := gauss 9 0.400000 ;
+   TERM rec10 := gauss 10 0.400000 ;
+   TERM rec11 := gauss 11 0.400000 ;
 END_FUZZIFY
 
 DEFUZZIFY temperature
-   TERM rec0_day := gbell 2 4 13.500000;
-   TERM rec0_night := gbell 2 4 5.000000;
-   TERM rec1_day := gbell 2 4 14.500000;
-   TERM rec1_night := gbell 2 4 5.500000;
-   TERM rec2_day := gbell 2 4 17.000000;
-   TERM rec2_night := gbell 2 4 7.000000;
-   TERM rec3_day := gbell 2 4 19.000000;
-   TERM rec3_night := gbell 2 4 9.000000;
-   TERM rec4_day := gbell 2 4 22.500000;
-   TERM rec4_night := gbell 2 4 12.000000;
-   TERM rec5_day := gbell 2 4 27.000000;
-   TERM rec5_night := gbell 2 4 16.000000;
-   TERM rec6_day := gbell 2 4 29.500000;
-   TERM rec6_night := gbell 2 4 18.000000;
-   TERM rec7_day := gbell 2 4 29.500000;
-   TERM rec7_night := gbell 2 4 18.000000;
-   TERM rec8_day := gbell 2 4 27.000000;
-   TERM rec8_night := gbell 2 4 16.000000;
-   TERM rec9_day := gbell 2 4 22.000000;
-   TERM rec9_night := gbell 2 4 12.500000;
-   TERM rec10_day := gbell 2 4 17.000000;
-   TERM rec10_night := gbell 2 4 8.500000;
-   TERM rec11_day := gbell 2 4 11.000000;
-   TERM rec11_night := gbell 2 4 6.000000;
+   TERM rec0_day := gauss 32.000000 4.000000;
+   TERM rec0_night := gauss 23.500000 4.000000;
+   TERM rec1_day := gauss 32.000000 4.000000;
+   TERM rec1_night := gauss 23.500000 4.000000;
+   TERM rec2_day := gauss 32.000000 4.000000;
+   TERM rec2_night := gauss 23.500000 4.000000;
+   TERM rec3_day := gauss 32.000000 4.000000;
+   TERM rec3_night := gauss 23.500000 4.000000;
+   TERM rec4_day := gauss 32.000000 4.000000;
+   TERM rec4_night := gauss 23.500000 4.000000;
+   TERM rec5_day := gauss 32.000000 4.000000;
+   TERM rec5_night := gauss 23.000000 4.000000;
+   TERM rec6_day := gauss 32.500000 4.000000;
+   TERM rec6_night := gauss 22.500000 4.000000;
+   TERM rec7_day := gauss 33.000000 4.000000;
+   TERM rec7_night := gauss 22.500000 4.000000;
+   TERM rec8_day := gauss 33.500000 4.000000;
+   TERM rec8_night := gauss 23.000000 4.000000;
+   TERM rec9_day := gauss 33.000000 4.000000;
+   TERM rec9_night := gauss 23.500000 4.000000;
+   TERM rec10_day := gauss 32.500000 4.000000;
+   TERM rec10_night := gauss 23.500000 4.000000;
+   TERM rec11_day := gauss 32.000000 4.000000;
+   TERM rec11_night := gauss 23.500000 4.000000;
    METHOD : COG;
    DEFAULT := 0;
 END_DEFUZZIFY
 
 DEFUZZIFY humidity
-   TERM rec0_humidity := gauss 0.760000 0.1;
-   TERM rec1_humidity := gauss 0.760000 0.1;
-   TERM rec2_humidity := gauss 0.760000 0.1;
-   TERM rec3_humidity := gauss 0.760000 0.1;
-   TERM rec4_humidity := gauss 0.760000 0.1;
-   TERM rec5_humidity := gauss 0.760000 0.1;
-   TERM rec6_humidity := gauss 0.600000 0.1;
-   TERM rec7_humidity := gauss 0.610000 0.1;
-   TERM rec8_humidity := gauss 0.660000 0.1;
-   TERM rec9_humidity := gauss 0.760000 0.1;
-   TERM rec10_humidity := gauss 0.760000 0.1;
-   TERM rec11_humidity := gauss 0.760000 0.1;
+   TERM rec0_humidity := gauss 0.850000 0.030000;
+   TERM rec1_humidity := gauss 0.870000 0.030000;
+   TERM rec2_humidity := gauss 0.880000 0.030000;
+   TERM rec3_humidity := gauss 0.870000 0.030000;
+   TERM rec4_humidity := gauss 0.870000 0.030000;
+   TERM rec5_humidity := gauss 0.820000 0.030000;
+   TERM rec6_humidity := gauss 0.800000 0.030000;
+   TERM rec7_humidity := gauss 0.770000 0.030000;
+   TERM rec8_humidity := gauss 0.770000 0.030000;
+   TERM rec9_humidity := gauss 0.790000 0.030000;
+   TERM rec10_humidity := gauss 0.800000 0.030000;
+   TERM rec11_humidity := gauss 0.850000 0.030000;
    METHOD : COG;
    DEFAULT := 0;
 END_DEFUZZIFY

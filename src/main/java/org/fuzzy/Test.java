@@ -3,12 +3,10 @@ package org.fuzzy;
 import net.sourceforge.jFuzzyLogic.FIS;
 import net.sourceforge.jFuzzyLogic.plot.JDialogFis;
 import net.sourceforge.jFuzzyLogic.plot.JFuzzyChart;
-import utils.ClimateData;
-import utils.ClimateRecord;
-import utils.FuzzyClimateSimulator;
-import utils.UtilityWriter;
+import utils.*;
 
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
 
 public class Test {
 
@@ -27,114 +25,25 @@ public class Test {
 
     public static void main(String[] args) throws Exception {
 
+        ClimateData brazil_amazonas = new ClimateData().
+                addRecord(new ClimateRecord(JANUARY, 32, 23.5, 0.85)).
+                addRecord(new ClimateRecord(FEBRUARY, 32, 23.5, 0.87)).
+                addRecord(new ClimateRecord(MARCH, 32, 23.5, 0.88)).
+                addRecord(new ClimateRecord(APRIL, 32, 23.5, 0.87)).
+                addRecord(new ClimateRecord(MAY, 32, 23.5, 0.87)).
+                addRecord(new ClimateRecord(JUNE, 32, 23, 0.82)).
+                addRecord(new ClimateRecord(JULY, 32.5, 22.5, 0.80)).
+                addRecord(new ClimateRecord(AUGUST, 33, 22.5, 0.77)).
+                addRecord(new ClimateRecord(SEPTEMBER, 33.5, 23, 0.77)).
+                addRecord(new ClimateRecord(OCTOBER, 33, 23.5, 0.79)).
+                addRecord(new ClimateRecord(NOVEMBER, 32.5, 23.5, 0.80)).
+                addRecord(new ClimateRecord(DECEMBER, 32, 23.5, 0.85));
 
-//        String fcl = "FUNCTION_BLOCK climate\n" +
-//                "\n" +
-//                "VAR_INPUT\n" +
-//                "   time : REAL;\n" +
-//                "   season : REAL;\n" +
-//                "END_VAR\n" + //
-//                "\n" + //
-//                "VAR_OUTPUT\n" + //
-//                "   temperature : REAL;\n" + //
-//                "END_VAR\n" + //
-//                "\n" + //
-//                "FUZZIFY time\n" + //
-//                "   TERM day := sigm -1.5 6;\n" + //
-//                "   TERM night := sigm 1.5 6;\n" + //
-//                "END_FUZZIFY\n" + //
-//                "\n" + //
-//                "FUZZIFY season\n" + //
-//                "   TERM summer := (0, 1) (2, 1) (4,0) ;\n" + //
-//                "   TERM winter := (2,0) (4,1) (6,1);\n" + //
-//                "END_FUZZIFY\n" + //
-//                "\n" + //
-//                "DEFUZZIFY temperature\n" + //
-//                "   TERM SumDay := gbell 2 4 34;\n" + //
-//                "   TERM SumNig := gbell 2 4 22;\n" + //
-//                "   TERM WinDay := gbell 2 4 30;\n" + //
-//                "   TERM WinNig := gbell 2 4 23;\n" + //
-//                "   METHOD : COG;\n" + //
-//                "   DEFAULT := 0;\n" + //
-//                "END_DEFUZZIFY\n" + //
-//                "\n" + //
-//                "DEFUZZIFY humidity\n" + //
-//                "   TERM SumHum := gbell 2 4 82;\n" + //
-//                "   TERM WinHum := gbell 2 4 88;\n" + //
-//                "   METHOD : COG;\n" + //
-//                "   DEFAULT := 0;\n" + //
-//                "END_DEFUZZIFY\n" + //
-//                "\n" + //
-//                "RULEBLOCK No1\n" + //
-//                "   ACCU : MAX;\n" + //
-//                "   AND : MIN;\n" + //
-//                "   ACT : MIN;\n" + //
-//                "\n" + //
-//                "   RULE 1 : IF time IS day AND season is summer THEN temperature IS SumDay, humidity IS SumHum;\n" + //
-//                "   RULE 2 : IF time IS night AND season is summer THEN temperature IS SumNig, humidity IS SumHum;\n" + //
-//                "   RULE 3 : IF time IS day AND season is winter THEN temperature IS WinDay, humidity IS WinHum;\n" + //
-//                "   RULE 4 : IF time IS night AND season is winter THEN temperature IS WinNig, humidity IS WinHum;\n" + //
-//                "END_RULEBLOCK\n" + //
-//                "\n" + //
-//                "END_FUNCTION_BLOCK\n";
-//
-//        FIS fis = FIS.createFromString(fcl, true);
-//        fis.setVariable("time", 0); // Set inputs
-//        fis.setVariable("season", 6);
-//        fis.evaluate();
-//
-//        // Create a plot
-//        JDialogFis jdf = null;
-//        if (!JFuzzyChart.UseMockClass) jdf = new JDialogFis(fis, 800, 600);
-//
-//        // Show output variable
-//        System.out.println("Output value:" + fis.getVariable("temperature").getValue());
-//        System.out.println("Output value:" + fis.getVariable("humidity").getValue());
-//
-//        UtilityWriter uwu = new UtilityWriter("test", new DecimalFormat("0.00"));
-//        uwu.initialize("Month", "Day", "Night");
-//
-//        // Set different values for 'food' and 'service'. Evaluate the system and show variables
-//        for (double season = 1.0, time = 0.0; season <= 12; season += 1) {
-//            // Evaluate system using these parameters
-//            fis.getVariable("season").setValue(Math.abs(season - 6));
-//            fis.getVariable("time").setValue(0);
-//            fis.evaluate();
-//            uwu.append(season).append(fis.getVariable("temperature").getValue());
-//
-//            fis.getVariable("time").setValue(12);
-//            fis.evaluate();
-//            uwu.append(fis.getVariable("temperature").getValue());
-//
-//            uwu.push();
-//
-//            // Print result & update plot
-//            System.out.println(String.format("Season: %2.2f\tTime:%2.2f\t=> Temperature: %2.2f ", season, time, fis.getVariable("temperature").getValue()));
-//            if (jdf != null) jdf.repaint();
-//
-//            // Small delay
-//            Thread.sleep(300);
-//        }
-//        uwu.save();
-
-        ClimateData cd = new ClimateData().
-                addRecord(new ClimateRecord(JANUARY, 13.5, 5, 0.76)).
-                addRecord(new ClimateRecord(FEBRUARY, 14.5, 5.5, 0.76)).
-                addRecord(new ClimateRecord(MARCH, 17, 7, 0.76)).
-                addRecord(new ClimateRecord(APRIL, 19, 9, 0.76)).
-                addRecord(new ClimateRecord(MAY, 22.5, 12, 0.76)).
-                addRecord(new ClimateRecord(JUNE, 27, 16, 0.76)).
-                addRecord(new ClimateRecord(JULY, 29.5, 18, 0.6)).
-                addRecord(new ClimateRecord(AUGUST, 29.5, 18, 0.61)).
-                addRecord(new ClimateRecord(SEPTEMBER, 27, 16, 0.66)).
-                addRecord(new ClimateRecord(OCTOBER, 22, 12.5, 0.76)).
-                addRecord(new ClimateRecord(NOVEMBER, 17, 8.5, 0.76)).
-                addRecord(new ClimateRecord(DECEMBER, 11, 6, 0.76));
-
-
-        FuzzyClimateSimulator fcs = new FuzzyClimateSimulator(cd);
-        fcs.makePlot();
-        fcs.fclSave("output/sample_fcl");
-
+        FuzzyClimateSimulator fcs = new FuzzyClimateSimulator(brazil_amazonas);
+        //fcs.makePlot();
+        FuzzyClimateController fcc = new FuzzyClimateController(fcs);
+        fcc.makePlot();
+        //System.out.println( fcc.getHeating(LocalDateTime.now()));
+        //System.out.println(fcc.getSprinkling(LocalDateTime.now()));
     }
 }
